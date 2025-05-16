@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 import { AuthDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
+import { JwtPayload } from 'src/types/jwt.type';
 
 @Injectable()
 export class AuthService {
@@ -69,5 +70,19 @@ export class AuthService {
 	async buildResponseObject(user: Omit<User, 'password'>) {
 		const tokens = await this.issueTokens(user.id);
 		return { user, ...tokens };
+	}
+
+	async getNewTokens(refreshToken: string) {
+		const result: JwtPayload = await this.jwtService.verifyAsync(refreshToken);
+
+		if (!result) throw new UnauthorizedException('Invalid token');
+
+		const user = await this.prisma.user.findUnique({
+			where: { id: result.id },
+		});
+
+		if (!user) throw new UnauthorizedException('User not found');
+
+		return this.buildResponseObject(user);
 	}
 }
