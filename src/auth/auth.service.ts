@@ -55,7 +55,7 @@ export class AuthService {
 			where: { email: dto.email },
 		});
 
-		if (!existingUser) throw new BadRequestException('A user with this email already exists!');
+		if (existingUser) throw new BadRequestException('A user with this email already exists!');
 
 		const newUser = await this.prisma.user.create({
 			data: {
