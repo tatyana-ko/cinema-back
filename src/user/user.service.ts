@@ -28,12 +28,14 @@ export class UserService {
 
 		if (!user) throw new NotFoundException('User not found');
 
-		const isSameUser = await this.prisma.user.findUnique({
-			where: { email: dto.email },
-		});
+		if (dto.email) {
+			const isSameUser = await this.prisma.user.findUnique({
+				where: { email: dto.email },
+			});
 
-		if (isSameUser && String(id) !== String(isSameUser.id))
-			throw new NotFoundException('Email already exist');
+			if (isSameUser && String(id) !== String(isSameUser.id))
+				throw new NotFoundException('Email already exist');
+		}
 
 		if (dto.password) {
 			const hashPassword = await hash(dto.password, 10);
