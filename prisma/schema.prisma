@@ -9,14 +9,27 @@ datasource db {
 }
 
 model User {
-  id String  @id @default(cuid())
-  
-  email String @unique
+  id String @id @default(cuid())
+
+  email    String  @unique
   password String
-  name String?
+  name     String? @default("user")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  // favorites 
+
   @@map("user")
+}
+
+model Genre {
+  id String @id @default(cuid())
+
+  title       String
+  description String
+
+  slug String
+
+  @@map("genre")
 }
