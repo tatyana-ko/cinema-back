@@ -20,5 +20,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "forceConsistentCasingInFileNames": true,
+    "types": ["node", "express", "multer"]
   }
 }
