@@ -33,3 +33,16 @@ model Genre {
 
   @@map("genre")
 }
+
+model Actor {
+  id String @id @default(cuid())
+
+  name  String
+  slug  String @unique
+  photo String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("actor")
+}
