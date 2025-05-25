@@ -18,7 +18,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  // favorites 
+  favorites Movie[] @relation("user_favorites")
 
   @@map("user")
 }
@@ -30,6 +30,8 @@ model Genre {
   description String
 
   slug String @unique
+
+  movies Movie[] @relation("movie_genres")
 
   @@map("genre")
 }
@@ -44,5 +46,32 @@ model Actor {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  movies Movie[] @relation("movie_actors")
+
   @@map("actor")
+}
+
+model Movie {
+  id String @id @default(cuid())
+
+  slug        String @unique
+  title       String
+  description String
+
+  poster    String
+  bigPoster String @map("big_poster")
+
+  videoUrl String @map("video_url")
+
+  genres          Genre[] @relation("movie_genres")
+  actors          Actor[] @relation("movie_actors")
+  favoritedByUser User[]  @relation("user_favorites")
+
+  year    Int
+  country String
+
+  rating Int
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
