@@ -16,14 +16,23 @@ export class CreateMovieDto {
 	@IsArray()
 	actors: string[];
 
-	@IsString()
-	year: string;
+	@IsNumber()
+	year: number;
 
 	@IsString()
 	country: string;
 
 	@IsNumber()
 	rating: number;
+
+	@IsString()
+	poster: string;
+
+	@IsString()
+	bigPoster: string;
+
+	@IsString()
+	videoUrl: string;
 }
 
 export type UpdateMovieDto = Partial<CreateMovieDto>;

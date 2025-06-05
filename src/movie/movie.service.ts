@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
+import { CreateMovieDto } from './dto/movie.dto';
 
 @Injectable()
 export class MovieService {
@@ -23,6 +24,48 @@ export class MovieService {
 		const movie = await this.prisma.movie.findUnique({ where: { slug } });
 
 		if (!movie) throw new NotFoundException('Movie not found');
+
+		return movie;
+	}
+
+	async create(dto: CreateMovieDto) {
+		const {
+			title,
+			slug,
+			description,
+			year,
+			country,
+			rating,
+			poster,
+			bigPoster,
+			videoUrl,
+			genres,
+			actors,
+		} = dto;
+
+		const movie = await this.prisma.movie.create({
+			data: {
+				title: title,
+				slug: slug,
+				description: description,
+				year: year,
+				country: country,
+				rating: rating,
+				poster: poster,
+				bigPoster: bigPoster,
+				videoUrl: videoUrl,
+				genres: { connect: genres.map(id => ({ id })) },
+				actors: { connect: actors.map(id => ({ id })) },
+			},
+			include: {
+				genres: {
+					select: { id: true, title: true },
+				},
+				actors: {
+					select: { id: true, name: true },
+				},
+			},
+		});
 
 		return movie;
 	}

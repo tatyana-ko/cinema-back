@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { MovieService } from './movie.service';
+import { CreateMovieDto } from './dto/movie.dto';
 
 @Controller('movies')
 export class MovieController {
@@ -18,5 +19,10 @@ export class MovieController {
 	@Get('by-slug/:slug')
 	async getBySlug(@Param('slug') slug: string) {
 		return this.movieService.getBySlug(slug);
+	}
+
+	@Post()
+	async createMovie(@Body() dto: CreateMovieDto) {
+		return this.movieService.create(dto);
 	}
 }
